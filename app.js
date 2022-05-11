@@ -96,17 +96,18 @@ function deleteTask(e) {
   e.preventDefault();
 }
 
-function addToLocalStorage(e) {
+function addToLocalStorage() {
+  if (taskInput.value === '') {
+    return
+  }
   const taskValue = taskInput.value;
   let tasks;
-  tasks = JSON.parse(localStorage.getItem('tasks'));
-
-  // remove all tasks fromm current localStorage
-  localStorage.removeItem('tasks');
   
   // if it's the first task
-  if (tasks === null) {
+  if (localStorage.getItem('tasks') === null) {
     tasks = [];
+  } else {
+    tasks = JSON.parse(localStorage.getItem('tasks'));
   }
 
   tasks.push(taskValue);
@@ -116,15 +117,13 @@ function addToLocalStorage(e) {
 }
 
 function removeFromLocalStorage(e) {
+  let taskToBeRemoved;
   if (e.target.classList.contains('fa-remove')) {
-    const taskToBeRemoved = e.target.parentElement.parentElement.childNodes[0];
+    taskToBeRemoved = e.target.parentElement.parentElement.childNodes[0];
   }
 
   // get all current tasks form localStorage
   const tasks = JSON.parse(localStorage.getItem('tasks'));
-
-  // delete current tasks form localStorage
-  localStorage.removeItem('tasks');
 
   // find index and remove the task
   const taskIndex = tasks.indexOf(taskToBeRemoved);
