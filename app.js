@@ -3,6 +3,7 @@ const form = document.querySelector('#task-form');
 const taskInput = document.querySelector('#task');
 const taskList = document.querySelector('.collection');
 const clearTasksButton = document.querySelector('.clear-tasks');
+const filter = document.querySelector('#filter');
 
 
 // Load all eventListeners
@@ -29,6 +30,9 @@ function loadEventListeners() {
   
   // delete all tasks from localStorage
   clearTasksButton.addEventListener('click', clearAll);
+
+  // filter tasks
+  filter.addEventListener('keyup', filterTasks);
 }
 
 function showCurrentTasks() {
@@ -132,7 +136,9 @@ function removeFromLocalStorage(e) {
 
 function clearAllFromList(e) {
   if (confirm('Are you sure you want to clear all tasks?')) {
-    taskList.innerHTML = '';
+    while (taskList.firstChild) {
+      taskList.removeChild(taskList.firstChild);
+    }
   }
 
   alert('all tasks cleared');
@@ -140,4 +146,18 @@ function clearAllFromList(e) {
 
 function clearAll() {
   localStorage.removeItem('tasks');
+}
+
+function filterTasks(e) {
+  const text = e.target.value.toLowerCase();
+
+  const tasks = document.querySelectorAll('.collection-item');
+  tasks.forEach(function(task) {
+    const item = task.firstChild.textContent.toLowerCase();
+    if (item.indexOf(text) !== -1) {
+      task.style.display = 'block';
+    } else {
+      task.style.display = 'none';
+    }
+  });
 }
